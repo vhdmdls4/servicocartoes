@@ -1,6 +1,7 @@
 spring:
   application:
     name: servicocartoes
+
 server:
   port: 0
 
