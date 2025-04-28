@@ -1,7 +1,10 @@
 package com.victorduarte.servicocartoes.application.entrypoint;
 
+import com.victorduarte.servicocartoes.application.representation.CardsByClientResponse;
 import com.victorduarte.servicocartoes.application.representation.CreditCardSaveRequest;
+import com.victorduarte.servicocartoes.application.service.ClientCardService;
 import com.victorduarte.servicocartoes.application.service.CreditCardService;
+import com.victorduarte.servicocartoes.domain.ClientCard;
 import com.victorduarte.servicocartoes.domain.CreditCard;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +16,8 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class CreditCardController {
-    private final CreditCardService service;
+    private final CreditCardService cardService;
+    private final ClientCardService clientCardService;
     @GetMapping("/test")
     public String getTest(){
         return "Test";
@@ -23,11 +27,16 @@ public class CreditCardController {
     public ResponseEntity<CreditCard> register(@RequestBody CreditCardSaveRequest request){
         CreditCard card = request.toModel();
 
-        return ResponseEntity.ok(service.save(card));
+        return ResponseEntity.ok(cardService.save(card));
     }
 
-    @GetMapping
+    @GetMapping(params = "income")
     public ResponseEntity<List<CreditCard>> getByMinimumIncomeLessThanEqual(@RequestParam("income") Long income){
-        return ResponseEntity.ok(service.findByMinimumIncomeLessThanEqual(income));
+        return ResponseEntity.ok(cardService.findByMinimumIncomeLessThanEqual(income));
+    }
+
+    @GetMapping(params = "cpf")
+    public ResponseEntity<List<CardsByClientResponse>> getCardsByCpf(@RequestParam("cpf") String cpf){
+        return ResponseEntity.ok(clientCardService.getCardsByClientCpf(cpf));
     }
 }

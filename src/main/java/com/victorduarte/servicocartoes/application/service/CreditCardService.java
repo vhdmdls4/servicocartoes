@@ -23,4 +23,5 @@ public class CreditCardService {
         return repository.findByMinimumIncomeLessThanEqual(BigDecimal.valueOf(income));
     }
 
+
 }
